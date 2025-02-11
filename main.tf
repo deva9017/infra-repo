@@ -15,12 +15,18 @@ resource "aws_lambda_function" "app_lambda" {
   s3_bucket       = aws_s3_bucket.lambda_code.bucket
   s3_key          = aws_s3_object.lambda_zip.key  
 
-  source_code_hash = filebase64sha256("lambda_function.zip")
+  source_code_hash = null_resource.trigger.id # Force redeployment
 
   environment {
     variables = {
       ENV = terraform.workspace
     }
+  }
+}
+
+resource "null_resource" "trigger" {
+  triggers = {
+    redeploy = timestamp()
   }
 }
 
