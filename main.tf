@@ -11,7 +11,7 @@ resource "aws_lambda_function" "app_lambda" {
   role            = aws_iam_role.lambda_role.arn
   runtime         = "nodejs18.x"
   handler         = "index.handler"
-  filename        = "lambda_function.zip"
+  filename        = "lambda-code-bucket19"
 
   s3_bucket       = aws_s3_bucket.lambda_code.bucket
   s3_key          = aws_s3_object.lambda_zip.key  
