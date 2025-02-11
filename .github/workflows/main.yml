@@ -31,14 +31,20 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume:  ${{ secrets.AWS_ROLE_ARN }}
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Initialize Terraform
       run: terraform init
 
-    - name: Select Terraform Workspace
-      run: terraform workspace select ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }} || terraform workspace new ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+    - name: Select or Create Terraform Workspace
+      run: |
+        WORKSPACE=$(terraform workspace list | grep -w ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }} | tr -d '* ')
+        if [ -z "$WORKSPACE" ]; then
+          terraform workspace new ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        else
+          terraform workspace select ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        fi
 
     - name: Apply Terraform Changes
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -var-file=environments/${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}.tfvars
