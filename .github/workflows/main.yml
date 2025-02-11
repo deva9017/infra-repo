@@ -1,7 +1,7 @@
 name: "Terraform Deploy"  
 
 on:
-  workflow_dispatch:
+  #workflow_dispatch:
   repository_dispatch:
     types: [trigger-from-app-repo]
 env:
