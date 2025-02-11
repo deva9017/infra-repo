@@ -11,13 +11,20 @@ resource "aws_s3_object" "lambda_zip" {
 
 */
 
-data "aws_s3_bucket" "lambda_code_bucket" {
-  bucket = "lambda-code-bucket19-prod"  # Replace with your actual bucket name
+resource "aws_s3_bucket" "lambda_bucket" {
+  bucket = "lambda-code-bucket19-${var.environment}"
+  force_destroy = true
 }
 
-resource "aws_s3_object" "lambda_zip" {
-  bucket = data.aws_s3_bucket.lambda_code_bucket.id
-  key    = "lambda_function.zip"
-  source = "lambda_function.zip"
-  
+resource "aws_s3_bucket_acl" "lambda_bucket_acl" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_public_access_block" "lambda_bucket" {
+  bucket                  = aws_s3_bucket.lambda_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
