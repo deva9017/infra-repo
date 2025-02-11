@@ -10,10 +10,7 @@ resource "aws_lambda_function" "app_lambda" {
   role            = aws_iam_role.lambda_role.arn
   handler         = "index.handler"
   runtime         = "nodejs18.x"
- 
-
-  depends_on = [aws_s3_object.lambda_zip]
-}
+ }
 
 resource "aws_api_gateway_rest_api" "app_api" {
   name        = "app-api-${local.environment}"
