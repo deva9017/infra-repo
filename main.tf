@@ -1,7 +1,7 @@
 locals {
   environment = terraform.workspace
 }
-*/
+/*
 resource "aws_s3_bucket" "lambda_code" {
   bucket = "lambda-code-bucket19-${local.environment}"
 }
