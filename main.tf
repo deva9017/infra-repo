@@ -13,9 +13,9 @@ resource "aws_lambda_function" "app_lambda" {
   handler         = "index.handler"
 
   s3_bucket       = aws_s3_bucket.lambda_code.bucket
-  s3_key          = aws_s3_object.lambda_zip.key
+  s3_key          = aws_s3_object.lambda_zip.key  
 
-  source_code_hash = filebase64sha256("lambda.zip")
+  source_code_hash = filebase64sha256("lambda_function.zip")
 
   environment {
     variables = {
