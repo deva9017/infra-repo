@@ -1,11 +1,9 @@
 name: "Terraform Deploy"  
 
 on:
-  push:
-    branches:
-      - main
-      - dev
-
+  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger-from-app-repo]
 env:
   AWS_REGION: ap-south-1
   TF_ACTION_WORKING_DIR: ./
