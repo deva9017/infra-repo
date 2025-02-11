@@ -21,10 +21,10 @@ resource "aws_s3_bucket_acl" "lambda_bucket_acl" {
   acl    = "private"
 }
 
-resource "aws_s3_bucket_public_access_block" "lambda_bucket" {
-  bucket                  = aws_s3_bucket.lambda_bucket.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+resource "aws_s3_object" "lambda_zip" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+  key    = "lambda_function.zip"
+  source = "lambda_function.zip"
+  etag   = filemd5("lambda_function.zip")
 }
+
