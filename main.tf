@@ -13,7 +13,7 @@ resource "aws_lambda_function" "app_lambda" {
   handler         = "index.handler"
   
 
-  s3_bucket       = aws_s3_bucket.lambda_code.bucket
+  s3_bucket       = data.aws_s3_bucket.lambda_code_bucket.id
   s3_key          = aws_s3_object.lambda_zip.key  
 
   source_code_hash = null_resource.trigger.id # Force redeployment
