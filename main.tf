@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_s3_bucket" "lambda_code" {
-  bucket = "lambda-code-bucket-${local.environment}"
+  bucket = "lambda-code-bucket19-${local.environment}"
 }
 
 resource "aws_lambda_function" "app_lambda" {
