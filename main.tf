@@ -1,5 +1,5 @@
 locals {
-  environment = terraform.workspace
+  environment = terraform.workspace 
 }
 /*
 resource "aws_s3_bucket" "lambda_code" {
