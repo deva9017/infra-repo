@@ -6,7 +6,7 @@ resource "aws_lambda_function" "app_lambda" {
   function_name    = "hello-world-lambda-${var.environment}"
   s3_bucket       = "lambda-code-bucket19-${var.environment}"
   s3_key          = "lambda_function.zip"
-  s3_object_version = null # Ensure latest version is used (optional)
+  
   role            = aws_iam_role.lambda_role.arn
   handler         = "index.handler"
   runtime         = "nodejs18.x"
