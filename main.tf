@@ -8,18 +8,16 @@ resource "aws_s3_bucket" "lambda_code" {
 
 resource "aws_lambda_function" "app_lambda" {
   function_name    = "hello-world-lambda-${var.environment}"
-  s3_bucket       = "lambda-code-bucket-${var.environment}"
+  s3_bucket       = "lambda-code-bucket19-${var.environment}"
   s3_key          = "lambda_function.zip"
+  s3_object_version = null # Ensure latest version is used (optional)
   role            = aws_iam_role.lambda_role.arn
   handler         = "index.handler"
   runtime         = "nodejs18.x"
-}
-resource "null_resource" "trigger" {
-  triggers = {
-    redeploy = timestamp()
-  }
-}
+  source_code_hash = filebase64sha256("lambda_function.zip")
 
+  depends_on = [aws_s3_object.lambda_zip]
+}
 
 resource "aws_api_gateway_rest_api" "app_api" {
   name        = "app-api-${local.environment}"
