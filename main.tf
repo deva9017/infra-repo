@@ -2,10 +2,6 @@ locals {
   environment = terraform.workspace
 }
 
-resource "aws_s3_bucket" "lambda_code" {
-  bucket = "lambda-code-bucket19-${local.environment}"
-}
-
 resource "aws_lambda_function" "app_lambda" {
   function_name    = "hello-world-lambda-${var.environment}"
   s3_bucket       = "lambda-code-bucket19-${var.environment}"
