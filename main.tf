@@ -14,7 +14,7 @@ resource "aws_lambda_function" "app_lambda" {
   role            = aws_iam_role.lambda_role.arn
   handler         = "index.handler"
   runtime         = "nodejs18.x"
-  source_code_hash = filebase64sha256("lambda_function.zip")
+ 
 
   depends_on = [aws_s3_object.lambda_zip]
 }
