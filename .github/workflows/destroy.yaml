@@ -1,0 +1,47 @@
+name: "Terraform Destroy"
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger-destroy-from-app-repo]
+
+env:
+  AWS_REGION: ap-south-1
+  TF_ACTION_WORKING_DIR: ./
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-destroy:
+    name: "Terraform Destroy"
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.3.0
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Initialize Terraform
+      run: terraform init -upgrade
+
+    - name: Select Terraform Workspace
+      run: |
+        WORKSPACE=$(terraform workspace list | grep -w ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }} | tr -d '* ')
+        if [ -n "$WORKSPACE" ]; then
+          terraform workspace select ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        fi
+
+    - name: Destroy Terraform Infrastructure
+      run: terraform destroy -auto-approve -var-file=environments/${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}.tfvars
