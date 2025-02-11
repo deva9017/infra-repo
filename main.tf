@@ -26,6 +26,14 @@ resource "aws_apigatewayv2_api" "http_api" {
   name          = "hello-world-api"
   protocol_type = "HTTP"
 }
+
+# Integration of API Gateway with Lambda
+resource "aws_apigatewayv2_integration" "lambda_integration" {
+  api_id           = aws_apigatewayv2_api.http_api.id
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.app_lambda.invoke_arn
+}
+
 # API Gateway Route
 resource "aws_apigatewayv2_route" "default_route" {
   api_id    = aws_apigatewayv2_api.http_api.id
