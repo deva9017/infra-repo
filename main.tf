@@ -24,8 +24,3 @@ module "auth" {
   source      = "./modules/auth"
   environment = local.environment
 }
-
-module "networking" {
-  source      = "./modules/networking"
-  environment = local.environment
-}
