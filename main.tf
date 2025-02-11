@@ -1,15 +1,15 @@
 locals {
   environment = terraform.workspace
 }
-
+*/
 resource "aws_s3_bucket" "lambda_code" {
   bucket = "lambda-code-bucket19-${local.environment}"
 }
-
+*/
 resource "aws_lambda_function" "app_lambda" {
   function_name = "my-app-lambda-${local.environment}"
-  s3_bucket     = aws_s3_bucket.lambda_code.bucket
-  s3_key        = "lambda.zip"
+  s3_bucket     = "lambda-code-bucket19-${local.environment}"
+  s3_key        = "lambda_function.zip"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
   role          = aws_iam_role.lambda_role.arn
